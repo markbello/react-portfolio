@@ -1,92 +1,118 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import PostList from './containers/PostList'
-import { Button, Grid, Sidebar, Segment, Header, Menu, Icon, Container, Image, Dropdown, Checkbox} from 'semantic-ui-react'
+import { Grid, Transition, Segment, Header, Menu, Container, Dropdown, Checkbox} from 'semantic-ui-react'
+import _ from 'underscore'
+import FilterBar from './components/FilterBar'
+
 
 class App extends Component {
 
   state = {
     tags: [],
     blog: true,
-    portfolio: false,
-    activeTags: []
+    portfolio: true,
+    activeTags: [],
+    posts: [],
+    filters: {
+      showBlog: true,
+      showPortfolio: true,
+      posts: []
+    }
   }
 
   componentDidMount = () => {
     this.fetchTags()
+    this.fetchPosts()
   }
 
   fetchTags = () => {
     fetch('http://www.nephewapps.com/wp-json/wp/v2/tags')
     .then(res => res.json())
     .then(json => {
-
       this.setState({
-        tags: json,
-        activeTags: json
-      }, () => console.log(this.state))
+        tags: json
+      }, () => {
+        console.log(`now have ${this.state.posts.length} posts`)
+      })
+    })
+  }
+
+  fetchPosts = () => {
+    fetch('http://www.nephewapps.com/wp-json/wp/v2/posts')
+    .then(res => res.json())
+    .then(json => {
+      this.setState({
+        posts: json
+      }, () => this.sortPostsByTags())
     })
   }
 
 
   handlePortfolioToggle = () => {
-    this.setState({portfolio: !this.state.portfolio}, () => console.log(this.state))
+    this.setState({
+      portfolio: !this.state.portfolio,
+      filters: {
+        ...this.state.filters,
+        showPortfolio: !this.state.portfolio
+      }
+    })
   }
 
   handleBlogToggle = () => {
-    this.setState({blog: !this.state.blog})
+    this.setState({
+      blog: !this.state.blog,
+      filters: {
+        ...this.state.filters,
+        showBlog: !this.state.blog
+      }
+    })
   }
 
   toggleOption = (e, data) => {
     let tags = data.value.map((tag, idx) => data.value[idx])
-    this.setState({activeTags: tags}, () => console.log(this.state))
+    this.setState({activeTags: tags}, () => this.sortPostsByTags())
+  }
+
+  sortPostsByTags = () => {
+    let filteredPosts = []
+    if(this.state.activeTags.length > 0){
+      this.state.posts.forEach((post) =>
+      {
+        (_.intersection(post.tags, this.state.activeTags).length > 0 ? filteredPosts.push(post) : null)
+      })
+      this.setState({
+        filters: {
+          showBlog: this.state.blog,
+          showPortfolio: this.state.portfolio,
+          posts: filteredPosts
+        }
+      }, () => {console.dir(this.state)})
+    } else{
+      this.setState({
+        filters: {
+          showBlog: this.state.blog,
+          showPortfolio: this.state.portfolio,
+          posts: this.state.posts
+        }
+      })
+    }
   }
 
   render() {
-    const options = this.state.tags.map((tag) => {
-      return {key: tag.slug, text: `${tag.name} (${tag.count})`, value: tag.id}
-    })
+
+
     return (
       <div>
-
-        <Menu borderless>
-            <Menu.Item basic header color='green' >Mark Bello | Full Stack Developer</Menu.Item>
-          <Menu.Menu position='right'>
-            <Menu.Item basic>
-              <Checkbox inverted defaultChecked label={{ children: 'Show Blog Posts' }} toggle value='blog' onChange={this.handleBlogToggle}/>
-            </Menu.Item>
-            <Menu.Item basic>
-              <Checkbox label={{ children: 'Show Portfolio Items' }} value='portfolio' toggle onChange={this.handlePortfolioToggle} />
-            </Menu.Item>
-            <Menu.Item basic>
-              <Dropdown fluid placeholder='Filter Content by Tags' multiple selection options={options} onChange={this.toggleOption} />
-            </Menu.Item>
-          </Menu.Menu>
-        </Menu>
-
-
+        <FilterBar
+          tags={this.state.tags}
+          handleBlogToggle={this.handleBlogToggle}
+          handlePortfolioToggle={this.handlePortfolioToggle}
+          toggleOption={this.toggleOption}/>
 
         <Container>
-          <Grid columns={2} stackable padded>
-            <Grid.Column>
-              <Segment padded='very' attached='top'>
-                <Header as='h1' textAlign='center'>Dev Blog</Header>
-                </Segment>
-                <Segment attached padded='very'>
-                <PostList activeTags={this.state.activeTags}/>
-              </Segment>
-            </Grid.Column>
-            <Grid.Column>
-              <Segment padded='very' attached='top'>
-                <Header as='h1' textAlign='center'>Portfolio</Header>
-                </Segment>
-                <Segment attached padded='very'>
-                <PostList activeTags={this.state.activeTags}/>
-              </Segment>
-            </Grid.Column>
+          <PostList activeTags={this.state.tags} filters={this.state.filters}/>
 
-          </Grid>
         </Container>
       </div>
     );
@@ -96,8 +122,11 @@ class App extends Component {
 export default App;
 
 
-// <ul>
-// {this.state.posts.map((post, idx) => {
-//   return <li key={idx}>{post.title.rendered}</li>
-// })}
-// </ul>
+// {this.state.blog && (<Grid.Column>
+//     <Segment padded='very' attached='top' >
+//       <Header as='h1' textAlign='center'>Dev Blog</Header>
+//     </Segment>
+//     <Segment attached padded='very'>
+//       <PostList activeTags={this.state.activeTags} posts={this.state.posts}/>
+//     </Segment>
+//   </Grid.Column>)}

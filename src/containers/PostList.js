@@ -1,64 +1,77 @@
 import React from 'react'
 import Post from '../components/Post'
-import { Feed } from 'semantic-ui-react'
+import { Feed, Transition, Grid, Segment, Header, Loader } from 'semantic-ui-react'
+
+
 
 class PostList extends React.Component {
-
-  state = {
-    posts: [],
-    activePosts: []
-  }
-
-  componentDidMount = () => {
-    this.fetchPosts()
-    this.sortPostsByTag(this.props)
-  }
-
   componentWillReceiveProps = (nextProps) => {
-    this.sortPostsByTag(nextProps)
+    console.dir(nextProps)
+  }
+  renderBlogColumn = () => {
+    const blogPosts = this.props.filters.posts.filter((post) => post.categories.includes(21))
+
+    const activeTags = this.props.activeTags
+
+    if(this.props.filters.showBlog){
+      return (<Transition visible animation='scale' duration={1000}>
+        <Grid.Column floated='left'>
+          <Segment padded='very' attached='top' >
+              <Header as='h1' textAlign='center'>Dev Blog</Header>
+          </Segment>
+          <Segment attached padded='very' >
+            <Feed size='large'>
+              {this.props.filters.posts.length == 0 ? <Loader active>Fetching Blog Posts</Loader> :
+
+                blogPosts.map((post, idx) => {
+                return (
+                  <Post key={idx} title={post.title} excerpt={post.excerpt.rendered} content={post.content.rendered} imageId={post.featured_media} activeTags={activeTags} tags={post.tags}/>
+                )
+              })}
+            </Feed>
+          </Segment>
+        </Grid.Column>
+      </Transition>)
+    }
   }
 
-  fetchPosts = () => {
-    fetch('http://www.nephewapps.com/wp-json/wp/v2/posts')
-    .then(res => res.json())
-    .then(json => {
+  renderPortfolioColumn = () => {
+    const portfolioPosts = this.props.filters.posts.filter((post) => post.categories.includes(22))
+    const activeTags = this.props.activeTags
+    
+    if(this.props.filters.showPortfolio){
+      return (
+        <Transition visible animation='scale' duration={1000}>
 
-      this.setState({
-        posts: json,
-        activePosts: json
-      })
-    })
-  }
-
-  sortPostsByTag = (nextProps) => {
-    if(nextProps.activeTags.length > 0) {
-      let filteredPosts = []
-      nextProps.activeTags.forEach((tag) => {
-        this.state.posts.forEach((post) => {
-          if(post.tags.includes(tag)){
-            filteredPosts.push(post)
-          }
-        })
-      })
-      this.setState({
-        activePosts: filteredPosts
-      })
-    } else{
-      this.setState({
-        activePosts: this.state.posts
-      })
+        <Grid.Column floated='right' >
+          <Segment padded='very' attached='top' >
+              <Header as='h1' textAlign='center'>Portfolio</Header>
+          </Segment>
+          <Segment attached padded='very' >
+            <Feed size='large'>
+              {this.props.filters.posts.length == 0 ? <Loader active>Fetching Portfolio Items</Loader> :
+              portfolioPosts.map((post, idx) => {
+                return (
+                  <Post key={idx} title={post.title} excerpt={post.excerpt.rendered} content={post.content.rendered} imageId={post.featured_media} activeTags={activeTags} tags={post.tags}/>
+                )
+              })}
+            </Feed>
+          </Segment>
+        </Grid.Column>
+      </Transition>
+    )
     }
   }
 
   render() {
     return (
-      <Feed>
-        {this.state.activePosts.map((post) => {
-          return (
-            <Post title={post.title} excerpt={post.excerpt.rendered} />
-          )
-        })}
-      </Feed>
+      <Grid columns={2} stackable padded='very' reversed='mobile'>
+        {this.renderBlogColumn()}
+        {this.renderPortfolioColumn()}
+      </Grid>
+
+
+
     )
   }
 }

@@ -19,7 +19,7 @@ body {
   height: 100%;
 }
 html {
-  font-size: 14px;
+  font-size: 16px;
 }
 body {
   margin: 0px;
@@ -102,11 +102,11 @@ p:last-child {
 --------------------*/
 
 a {
-  color: #4183C4;
+  color: #24B99B;
   text-decoration: none;
 }
 a:hover {
-  color: #1e70bf;
+  color: #0cb08f;
   text-decoration: none;
 }
 
