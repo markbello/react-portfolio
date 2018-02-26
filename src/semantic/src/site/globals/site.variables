@@ -1,0 +1,16 @@
+/*******************************
+     User Global Variables
+*******************************/
+
+@headerFont        : 'Montserrat', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont          : 'Montserrat', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+@importGoogleFonts : true;
+@googleFontName    : 'Montserrat';
+@googleFontSizes   : '200,200italic';
+@googleFontFamily  : '@{googleFontName}:@{googleFontSizes}';
+
+@green: #24B99B;
+
+@primaryColor        : @green;
+@pageBackground      : @black;
