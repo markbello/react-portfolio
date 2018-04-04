@@ -27,7 +27,7 @@ class App extends Component {
   }
 
   fetchTags = () => {
-    fetch('http://www.nephewapps.com/wp-json/wp/v2/tags')
+    fetch('https://www.nephewapps.com/wp-json/wp/v2/tags')
     .then(res => res.json())
     .then(json => {
       this.setState({
@@ -39,7 +39,7 @@ class App extends Component {
   }
 
   fetchPosts = () => {
-    fetch('http://www.nephewapps.com/wp-json/wp/v2/posts')
+    fetch('https://www.nephewapps.com/wp-json/wp/v2/posts')
     .then(res => res.json())
     .then(json => {
       this.setState({
