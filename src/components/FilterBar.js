@@ -12,7 +12,7 @@ class FilterBar extends React.Component {
     return (
       <React.Fragment>
       <Responsive as={Menu} borderless {...Responsive.onlyComputer}>
-          <Menu.Item textAlign='center' header color='green' >Mark Bello | Full Stack Developer | <a href='mailto:mark@nephewapps.com'> Email Me</a></Menu.Item>
+          <Menu.Item textAlign='center' header color='green' >Mark Bello | Full Stack Developer | <a style={{marginLeft: '5px'}} href='mailto:mark@nephewapps.com'> Email Me</a></Menu.Item>
         <Menu.Menu position='right'>
           <Menu.Item >
             <Checkbox defaultChecked label={{ children: 'Show Blog Posts' }} toggle value='blog' onChange={this.props.handleBlogToggle}/>
@@ -27,7 +27,7 @@ class FilterBar extends React.Component {
       </Responsive>
 
       <Responsive as={Menu} borderless stackable {...Responsive.onlyMobile}>
-        <Menu.Item textAlign='center' color='green' >Mark Bello | Full Stack Developer | <a href='mailto:mark@nephewapps.com'> Email Me</a></Menu.Item>
+        <Menu.Item textAlign='center' color='green' >Mark Bello | Full Stack Developer | <a style={{marginLeft: '5px'}} href='mailto:mark@nephewapps.com'> Email Me</a></Menu.Item>
         <Menu.Menu position='right'>
           <Menu.Item >
             <Checkbox defaultChecked label={{ children: 'Show Blog Posts' }} toggle value='blog' onChange={this.props.handleBlogToggle}/>
@@ -44,7 +44,7 @@ class FilterBar extends React.Component {
       </Responsive>
 
       <Responsive as={Menu} borderless stackable {...Responsive.onlyTablet}>
-        <Menu.Item textAlign='center' color='green' >Mark Bello | Full Stack Developer | <a href='mailto:mark@nephewapps.com'> Email Me</a></Menu.Item>
+        <Menu.Item textAlign='center' color='green' >Mark Bello | Full Stack Developer | <a style={{marginLeft: '5px'}} href='mailto:mark@nephewapps.com'> Email Me</a></Menu.Item>
         <Menu.Menu position='right'>
           <Menu.Item >
             <Checkbox defaultChecked label={{ children: 'Show Blog Posts' }} toggle value='blog' onChange={this.props.handleBlogToggle}/>
