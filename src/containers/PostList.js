@@ -5,9 +5,11 @@ import { Feed, Transition, Grid, Segment, Header, Loader } from 'semantic-ui-rea
 
 
 class PostList extends React.Component {
+
   componentWillReceiveProps = (nextProps) => {
     console.dir(nextProps)
   }
+
   renderBlogColumn = () => {
     const blogPosts = this.props.filters.posts.filter((post) => post.categories.includes(21))
 
@@ -16,9 +18,11 @@ class PostList extends React.Component {
     if(this.props.filters.showBlog){
       return (<Transition visible animation='scale' duration={1000}>
         <Grid.Column floated='left'>
+
           <Segment padded='very' attached='top' >
               <Header as='h1' textAlign='center'>Dev Blog</Header>
           </Segment>
+
           <Segment attached padded='very' >
             <Feed size='large'>
               {this.props.filters.posts.length == 0 ? <Loader active>Fetching Blog Posts</Loader> :
@@ -38,7 +42,7 @@ class PostList extends React.Component {
   renderPortfolioColumn = () => {
     const portfolioPosts = this.props.filters.posts.filter((post) => post.categories.includes(22))
     const activeTags = this.props.activeTags
-    
+
     if(this.props.filters.showPortfolio){
       return (
         <Transition visible animation='scale' duration={1000}>
@@ -65,7 +69,7 @@ class PostList extends React.Component {
 
   render() {
     return (
-      <Grid columns={2} stackable padded='very' reversed='mobile'>
+      <Grid columns={this.props.columnCount} stackable padded='very' reversed='mobile'>
         {this.renderBlogColumn()}
         {this.renderPortfolioColumn()}
       </Grid>

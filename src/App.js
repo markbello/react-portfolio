@@ -99,6 +99,14 @@ class App extends Component {
     }
   }
 
+    setColumnCount = () => {
+      if(this.state.filters.showBlog && this.state.filters.showPortfolio){
+        return 2
+      } else{
+        return 1
+      }
+    }
+
   render() {
 
 
@@ -111,7 +119,7 @@ class App extends Component {
           toggleOption={this.toggleOption}/>
 
         <Container>
-          <PostList activeTags={this.state.tags} filters={this.state.filters}/>
+          <PostList activeTags={this.state.tags} filters={this.state.filters} columnCount={this.setColumnCount()}/>
 
         </Container>
       </div>
